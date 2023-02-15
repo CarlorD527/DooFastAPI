@@ -22,11 +22,11 @@ namespace DF.Infrastructure.Persistences.Contexts.Configuration
             builder.Property(e => e.IdOrden).HasColumnName("id_orden");
             builder.Property(e => e.IdPlatillo).HasColumnName("id_platillo");
 
-            builder.HasOne(d => d.IdOrdenNavigation).WithMany(p => p.OrdenesPlatillos)
+            builder.HasOne(d => d.IdOrdenNavigation).WithMany(p => p.ListaOrdenesPlatillos)
                 .HasForeignKey(d => d.IdOrden)
                 .HasConstraintName("FK_PLATILLO_ESTA_ORDENES");
 
-            entity.HasOne(d => d.IdPlatilloNavigation).WithMany(p => p.OrdenesPlatillos)
+            builder.HasOne(d => d.IdPlatilloNavigation).WithMany(p => p.OrdenesPlatillos)
                 .HasForeignKey(d => d.IdPlatillo)
                 .HasConstraintName("FK_ORDEN_TIENE_PLATILLOS");
         }

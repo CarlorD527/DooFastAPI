@@ -1,4 +1,6 @@
 ﻿using DF.Infrastructure.Persistences.Contexts;
+using DF.Infrastructure.Persistences.Interfaces;
+using DF.Infrastructure.Persistences.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +16,10 @@ namespace DF.Infrastructure.Extensions
             services.AddDbContext<DoofastContext>(
                 options => options.UseSqlServer(
                         configuration.GetConnectionString("DoofastConnection"), b => b.MigrationsAssembly(assembly)), ServiceLifetime.Transient);
-              
+
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+           
             return services;
 
         }

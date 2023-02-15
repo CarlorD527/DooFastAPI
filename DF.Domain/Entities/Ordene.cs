@@ -37,5 +37,5 @@ public partial class OrdenesPlatillos
 
     public virtual Restaurante? IdRestauranteNavigation { get; set; }
 
-    public virtual ICollection<OrdenesPlatillo> OrdenesPlatillos { get; } = new List<OrdenesPlatillo>();
+    public virtual ICollection<OrdenesPlatillo> ListaOrdenesPlatillos { get; } = new List<OrdenesPlatillo>();
 }
