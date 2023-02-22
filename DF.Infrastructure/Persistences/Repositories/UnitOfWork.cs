@@ -13,10 +13,13 @@ namespace DF.Infrastructure.Persistences.Repositories
         private readonly DoofastContext _context;
         public ICategoriaRepository Categoria { get; private set; }
 
+        public IRestauranteRepository Restaurante { get; private set; }
+
         public UnitOfWork(DoofastContext context)
         {
             _context = context;
             Categoria = new CategoriaRepository(_context);
+            Restaurante= new RestauranteRepository(_context);
         }
 
         public void Dispose()

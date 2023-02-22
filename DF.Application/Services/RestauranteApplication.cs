@@ -9,43 +9,38 @@ using DF.Infrastructure.Commons.Bases.Request;
 using DF.Infrastructure.Commons.Bases.Response;
 using DF.Infrastructure.Persistences.Interfaces;
 using DF.Utilities.Static;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DF.Application.Services
 {
-    public class CategoryApplication : ICategoryApplication
+    public class RestauranteApplication : IRestauranteApplication
     {
-
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
-        private readonly CategoryValidator _validatorRules;
+        private readonly RestauranteValidator _validatorRules;
 
-        public CategoryApplication(IUnitOfWork unitOfWork, IMapper mapper, CategoryValidator validatorRules)
+        public RestauranteApplication (IUnitOfWork unitOfWork, IMapper mapper, RestauranteValidator validatorRules)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _validatorRules = validatorRules;
         }
-        public async Task<BaseResponse<BaseEntityResponse<CategoryResponseDto>>> ListCategories(BaseFilterRequest filters)
+        public async Task<BaseResponse<BaseEntityResponse<RestauranteResponseDto>>> ListRestaurantes(BaseFilterRequest filters)
         {
-            var response = new BaseResponse<BaseEntityResponse<CategoryResponseDto>>();
-            var categories = await _unitOfWork.Categoria.ListCategories(filters);
+            var response = new BaseResponse<BaseEntityResponse<RestauranteResponseDto>>();
+            var restaurantes = await _unitOfWork.Restaurante.ListRestaurantes(filters);
 
-            if (categories is not null)
+            if (restaurantes is not null)
             {
 
                 response.isSucces = true;
-                response.Data = _mapper.Map<BaseEntityResponse<CategoryResponseDto>>(categories);
+                response.Data = _mapper.Map<BaseEntityResponse<RestauranteResponseDto>>(restaurantes);
                 response.Message = ReplyMessage.MESSAGE_QUERY;
 
             }
-            else {
+            else
+            {
 
                 response.isSucces = false;
                 response.Message = ReplyMessage.MESSAGE_QUERY_EMPTY;
@@ -55,54 +50,55 @@ namespace DF.Application.Services
             return response;
         }
 
-        public async Task<BaseResponse<IEnumerable<CategorySelectResponseDto>>> ListSelectCategories()
+        public async Task<BaseResponse<IEnumerable<RestauranteSelectResponseDto>>> ListSelectRestaurantes()
         {
-            var response = new BaseResponse<IEnumerable<CategorySelectResponseDto>>();
-            var categories = await _unitOfWork.Categoria.ListSelectCategories();
+            var response = new BaseResponse<IEnumerable<RestauranteSelectResponseDto>>();
+            var restaurantes = await _unitOfWork.Restaurante.ListSelectRestaurantes();
 
-            if (categories is not null)
+            if (restaurantes is not null)
             {
                 response.isSucces = true;
-                response.Data = _mapper.Map<IEnumerable<CategorySelectResponseDto>>(categories);
+                response.Data = _mapper.Map<IEnumerable<RestauranteSelectResponseDto>>(restaurantes);
                 response.Message = ReplyMessage.MESSAGE_QUERY;
             }
-            else {
+            else
+            {
 
                 response.isSucces = false;
                 response.Message = ReplyMessage.MESSAGE_QUERY_EMPTY;
             }
             return response;
         }
-
-        public async Task<BaseResponse<CategoryResponseDto>> CategoryById(int categoryId)
+        public async Task<BaseResponse<RestauranteResponseDto>> RestauranteById(int restauranteId)
         {
-            var response = new BaseResponse<CategoryResponseDto>();
+            var response = new BaseResponse<RestauranteResponseDto>();
 
-            var category = await _unitOfWork.Categoria.CategoryById(categoryId);
+            var restaurante = await _unitOfWork.Restaurante.RestauranteById(restauranteId);
 
-            if (category is not null)
+            if (restaurante is not null)
             {
                 response.isSucces = true;
-                response.Data = _mapper.Map<CategoryResponseDto>(category);
+                response.Data = _mapper.Map<RestauranteResponseDto>(restaurante);
                 response.Message = ReplyMessage.MESSAGE_QUERY;
 
             }
-            else {
+            else
+            {
 
                 response.isSucces = false;
                 response.Message = ReplyMessage.MESSAGE_QUERY_EMPTY;
-                
+
             }
 
             return response;
-        }
 
-        public async Task<BaseResponse<bool>> RegisterCategory(CategoryRequestDto requestDto)
+        }
+        public async Task<BaseResponse<bool>> RegisterRestaurante(RestauranteRequestDto requestDto)
         {
             var response = new BaseResponse<bool>();
             var validationResult = await _validatorRules.ValidateAsync(requestDto);
 
-            if(!validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
                 response.isSucces = false;
                 response.Message = ReplyMessage.MESSAGE_VALIDATE;
@@ -111,8 +107,8 @@ namespace DF.Application.Services
 
             }
 
-            var category = _mapper.Map<Categoria>(requestDto);
-            response.Data = await _unitOfWork.Categoria.RegisterCategory(category);
+            var restaurante = _mapper.Map<Restaurante>(requestDto);
+            response.Data = await _unitOfWork.Restaurante.RegisterRestaurante(restaurante);
 
             if (response.Data)
             {
@@ -121,7 +117,8 @@ namespace DF.Application.Services
                 response.Message = ReplyMessage.MESSAGE_SAVE;
 
             }
-            else {
+            else
+            {
                 response.isSucces = false;
                 response.Message = ReplyMessage.MESSAGE_FAILED;
 
@@ -129,24 +126,24 @@ namespace DF.Application.Services
 
             return response;
         }
-        public async Task<BaseResponse<bool>> EditCategory(int categoryId, CategoryRequestDto requestDto)
+        public async Task<BaseResponse<bool>> EditRestaurante(int restauranteId, RestauranteRequestDto requestDto)
         {
             var response = new BaseResponse<bool>();
-            var categoryEdit = await CategoryById(categoryId);
+            var restauranteEdit = await RestauranteById(restauranteId);
 
-            if (categoryEdit.Data is null) {
+            if (restauranteEdit.Data is null)
+            {
 
                 response.isSucces = false;
                 response.Message = ReplyMessage.MESSAGE_QUERY_EMPTY;
 
-            
+
             }
-        
-            var category = _mapper.Map<Categoria>(requestDto);
-            category.IdCategoria = categoryId;
-            category.Activo = (bool)categoryEdit.Data!.Activo!;
-            category.FechaCreacion= (DateTime)categoryEdit!.Data.FechaCreacion!;
-            response.Data = await _unitOfWork.Categoria.EditCategory(category);
+            var restaurate = _mapper.Map<Restaurante>(requestDto);
+            restaurate.IdRestaurante = restauranteId;
+            restaurate.Activo = (bool)restauranteEdit.Data!.Activo!;
+            restaurate.FechaCreacion = (DateTime)restauranteEdit!.Data.FechaCreacion!;
+            response.Data = await _unitOfWork.Restaurante.EditRestaurante(restaurate);
 
             if (response.Data)
             {
@@ -155,22 +152,22 @@ namespace DF.Application.Services
                 response.Message = ReplyMessage.MESSAGE_UPDATE;
 
             }
-            else { 
-            
+            else
+            {
+
                 response.isSucces = false;
                 response.Message = ReplyMessage.MESSAGE_FAILED;
             }
 
-            return response; 
+            return response;
         }
-
-        public async Task<BaseResponse<bool>> RemoveCategory(int categoryId)
+        public async Task<BaseResponse<bool>> RemoveRestaurante(int restauranteId)
         {
             var response = new BaseResponse<bool>();
 
-            var category = await CategoryById(categoryId);
+            var restaurante = await RestauranteById(restauranteId);
 
-            if(category.Data is null)
+            if (restaurante.Data is null)
             {
                 response.isSucces = false;
                 response.Message = ReplyMessage.MESSAGE_QUERY_EMPTY;
@@ -178,14 +175,15 @@ namespace DF.Application.Services
             }
 
 
-            response.Data = await _unitOfWork.Categoria.RemoveCategory(categoryId);
+            response.Data = await _unitOfWork.Restaurante.RemoveRestaurante(restauranteId);
 
-            if (response.Data) { 
-            
+            if (response.Data)
+            {
+
                 response.isSucces = true;
-              
             }
-            return response; 
+            return response;
         }
+
     }
 }

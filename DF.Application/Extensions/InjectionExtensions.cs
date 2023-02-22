@@ -29,6 +29,8 @@ namespace DF.Application.Extensions
 
             services.AddScoped<ICategoryApplication, CategoryApplication>();
 
+            services.AddScoped<IRestauranteApplication, RestauranteApplication>();
+
             return services;
 
         }

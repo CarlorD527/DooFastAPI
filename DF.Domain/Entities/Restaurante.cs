@@ -17,7 +17,7 @@ public partial class Restaurante
 
     public int Aforo { get; set; }
 
-    public DateTime FechaCreacion { get; set; }
+    public DateTime? FechaCreacion { get; set; }
 
     public DateTime? FechaActualizacion { get; set; }
 

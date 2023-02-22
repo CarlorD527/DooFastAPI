@@ -7,7 +7,6 @@ namespace DF.Infrastructure.Persistences.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-
         protected IQueryable<TDTO> Ordering<TDTO>(BasePaginationRequest request, IQueryable<TDTO> queryable, bool pagination = false) where TDTO : class
         {
 

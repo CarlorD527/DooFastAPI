@@ -12,6 +12,8 @@ namespace DF.Infrastructure.Persistences.Interfaces
         //Declaracion o matricula de nuestra interfaces a nivel repository
 
         ICategoriaRepository Categoria { get; }
+        IRestauranteRepository Restaurante { get; }
+
         void SaveChanges();
         Task SaveChangesAsync();
     }

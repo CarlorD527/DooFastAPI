@@ -15,7 +15,7 @@ public partial class Categoria
 
     public DateTime? FechaActualizacion { get; set; }
 
-    public bool? Activo { get; set; }
+    public bool Activo { get; set; }
 
     public virtual ICollection<Platillo> Platillos { get; } = new List<Platillo>();
 }
